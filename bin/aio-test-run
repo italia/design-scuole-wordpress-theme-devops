@@ -1,0 +1,9 @@
+#!/usr/bin/expect
+
+spawn "./bin/app-valutazione-scuole"
+sleep 3
+send -- "http://localhost:8080"
+send -- "\r"
+sleep 1
+send -- "\r"
+expect eof

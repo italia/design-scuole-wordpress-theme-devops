@@ -1,0 +1,11 @@
+#!/bin/sh
+
+apt install --yes \
+    docker-compose \
+    docker.io \
+    "$(: "# end of list")"
+
+
+usermod -a -G docker vagrant
+
+echo "logout or sudo is required right to see the group change"
