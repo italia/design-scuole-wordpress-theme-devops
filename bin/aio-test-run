@@ -1,9 +1,43 @@
-#!/usr/bin/expect
+#!/usr/bin/expect -f
 
-spawn "./bin/app-valutazione-scuole"
-sleep 3
-send -- "http://localhost:8080"
+set timeout -1
+log_user 1
+
+set custom_url [lindex $argv 0]
+set production [lindex $argv 1]
+
+set default_url "http://localhost:8080"
+
+if {[llength $argv] == 0} {
+    send_user "Usage: aio-test-run http://sito.example.com [--production]\n"
+    send_user "Now usigng default site: http//:localhost:8080\n"
+    set custom_url "$default_url"
+}
+
+spawn -noecho "app-valutazione-scuole"
+expect "protocollo"
+send -- "$custom_url"
 send -- "\r"
+expect "Ambiente"
 sleep 1
+if { $production eq "--production" } {
+    # Traditional escape sequence...
+    #
+    # sh -c "printf '%q\n' $(tput kcud1)"
+    #
+    # No idea why the /traditional/ escape sequence does not work! And also
+    # autoexpect suggest a wrong sequence!
+    #
+    # See: http://computer-programming-forum.com/57-tcl/1a8da4240bead64c.htm
+    #
+    send -- "\x1B\[B"
+}
 send -- "\r"
 expect eof
+
+send_user "Copying the report to /report.d if present:"
+system test -d /report.d && cp -v $env(HOME)/report* /report.d
+wait
+
+send_user "Have a look to the reports!"
+send_user "\n"

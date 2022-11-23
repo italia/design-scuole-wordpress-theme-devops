@@ -1,11 +1,15 @@
 #!/bin/sh
 
+set -e
+
 # https://stackoverflow.com/questions/58134793/error-while-loading-shared-libraries-libnss3-so-while-running-gtlab-ci-job-to
-apt-get install -y \
+apt-get update && apt-get install --yes --no-install-recommends \
     ca-certificates \
+    curl \
     expect \
     fonts-liberation \
     gconf-service \
+    jq \
     libasound2 \
     libatk1.0-0 \
     libc6 \
@@ -41,11 +45,6 @@ apt-get install -y \
     libxtst6 \
     lsb-release \
     unzip \
-    wget \
     xdg-utils \
-    "$(: "# end of list")"
-
-# FIXME: hardcoded
-wget -c "https://github.com/italia/pa-website-validator/releases/download/v1.0.11/scuole-1.0.11-Linux-x64.zip"
-unzip "scuole-1.0.11-Linux-x64.zip" && rm -- scuole-1.0.11-Linux-x64.zip
-mv app-valutazione-scuole bin/
+    "$(: "# end of list")" \
+    && rm -rf /var/lib/apt/lists/*  # should be automatically done from official debian images

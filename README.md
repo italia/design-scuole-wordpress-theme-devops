@@ -60,13 +60,27 @@ docker-compose run cli wp user update test --user_pass="unapasswordsicura"
 
 ## Esecuzione test suite **App di valutazione dell'adesione ai modelli**
 
+### In locale con podman
+
+``` sh
+mkdir risultati
+podman run --user root --volume ./risultati:/report.d ghcr.io/italia/design-scuole-wordpress-theme-devops:pwv-latest http://localhost:8080
+podman run --user root --volume ./risultati:/report.d ghcr.io/italia/design-scuole-wordpress-theme-devops:pwv-latest https://scuola.example.org --production
+# aprire il browser in risultati
+xdg-open risultati
+```
+
+### In locale
+
 La [test suite](https://github.com/italia/pa-website-validator) non è ancora
 distribuita come immagine container, lo script `aio-test-install-debian`
 installa le dipendenze necessarie in un sistema debian 11.
 
 ``` sh
 ./bin/aio-test-install-debian
+./bin/aio-test-install-base
 ./bin/aio-test-run
+xdg-open risultati "${HOME}"
 ```
 
 Nella home utente si troverà il report della app di valutazione in formato html

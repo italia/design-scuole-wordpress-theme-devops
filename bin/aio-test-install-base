@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+# FIXME: hardcoded arch, but at this time the build is made only for amd64/x86-64
+
+ZIP_URL="$(curl -s \
+  -H "Accept: application/vnd.github+json" \
+  "https://api.github.com/repos/italia/pa-website-validator/releases/latest" | \
+  jq -r '.assets[] | select (.name | test("scuole.*-Linux-x64.zip")) | .browser_download_url')"
+ZIP_NAME="$(basename "${ZIP_URL}")"
+
+curl --silent --continue-at - --location --output "${ZIP_NAME}" "${ZIP_URL}"
+unzip "${ZIP_NAME}" && rm -- "${ZIP_NAME}"
+mv app-valutazione-scuole /usr/local/bin/ || mv app-valutazione-scuole ./bin/
