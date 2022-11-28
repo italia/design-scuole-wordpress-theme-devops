@@ -6,6 +6,11 @@ on:
       - "main"
 
 permissions:
+  # TODO: search for an API to automate
+  # For organizations, you should allow the upload explicitly at:
+  # https://github.com/orgs/$ORG/packages/container/$REPO/settings
+
+  # Those are redundant settings:
   # To upload archives as GitHub Releases
   contents: write
   # To push Docker images to GitHub
